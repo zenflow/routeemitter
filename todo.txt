@@ -1,5 +1,2 @@
-document events
-add more examples in jsdocs
+document everything over again
 smoothScroll option
-router.on('home contact', doSomething);
-router.on('/blog*path', doSomethingElse);

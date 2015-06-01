@@ -1,7 +1,7 @@
 {
   "name": "obs-router",
-  "version": "2.0.4",
-  "description": "Mutable observable abstraction of url as route with parameters",
+  "version": "3.0.0",
+  "description": "***",
   "keywords": [
     "observe",
     "observable",
@@ -11,7 +11,9 @@
     "route",
     "router",
     "isomorphic",
-    "browser"
+    "browser",
+    "location",
+    "history"
   ],
   "main": "lib/index.js",
   "author": {
@@ -24,7 +26,7 @@
     "url": "https://github.com/zenflow/obs-router"
   },
   "dependencies": {
-    "cancellable-next-tick": "^1.0.0",
+    "cancellable-next-tick": "^1.0.3",
     "html5-history": "^0.1.5",
     "lodash": "^3.9.3",
     "route-parser": "0.0.3"
