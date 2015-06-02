@@ -32,6 +32,7 @@
     "route-parser": "0.0.3"
   },
   "devDependencies": {
+    "async-series": "0.0.1",
     "del": "^1.1.1",
     "gather-events": "^1.0.1",
     "gh-pages-commit": "^1.0.2",

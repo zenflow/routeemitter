@@ -1,6 +1,7 @@
 var assert = require('assert');
 var test = require('tape');
 var _ = require('lodash');
+var asyncSeries = require('async-series');
 var dummy = require('./dummy');
 var ObsRouter = require('../lib');
 
@@ -15,8 +16,8 @@ test('stateless members', function(t){
     t.deepEqual(router.patterns, dummy.patterns);
     t.equal(typeof router.Route, 'function');
     t.ok(router.Route.prototype instanceof ObsRouter.prototype.Route);
-    //router.destroy(); not nocessary here since !listeners && !bindToWindow
 });
+
 test('converts dummy urls to routes and back to same urls', function(t){
     t.plan(dummy.urls.length);
     var router = dummy.getRouter(false);
@@ -25,7 +26,6 @@ test('converts dummy urls to routes and back to same urls', function(t){
         route = router.Route(route.name, route.params);
         t.equal(route.url, dummy_url);
     });
-    //router.destroy(); not nocessary here since !listeners && !bindToWindow
 });
 
 test('converts dummy routes to urls and back to same routes', function(t){
@@ -37,25 +37,65 @@ test('converts dummy routes to urls and back to same routes', function(t){
         t.equal(route.name, dummy_route.name);
         t.deepEqual(route.params, dummy_route.params);
     });
-    //router.destroy(); not nocessary here since !listeners && !bindToWindow
 });
+
 test('converts dummy urls to dummy route equivalents', function(t){
-    if (dummy.urls.length!=dummy.routes.length){return t.fail('dummy.routes.length != dummy.urls.length')}
-    t.plan(dummy.routes.length*2);
+    t.plan(dummy.urls.length*2);
     var router = dummy.getRouter(false);
     _.forEach(dummy.routes, function(dummy_route, i){
         var route = router.Route(dummy.urls[i]);
         t.equal(route.name, dummy_route.name);
         t.deepEqual(route.params, dummy_route.params);
     });
-    //router.destroy(); not nocessary here since !listeners && !bindToWindow
 });
-test('initial state with bindToWindow: false', function(t){
-    t.plan(1);
-    var router = dummy.getRouter(false);
-    t.doesNotThrow(getAssertState(router, '', 'notfound', {path: ''}));
-    //router.destroy(); not nocessary here since !listeners && !bindToWindow
-});
+
+test('state manipulation /w bindToWindow: false', getTestStateManipulation(false));
+
+if (process.browser){
+    test('state manipulation /w bindToWindow: true', getTestStateManipulation(true));
+}
+
+function getTestStateManipulation(bindToWindow){
+    return function(t){
+        if (dummy.urls.length!=dummy.routes.length){t.fail('dummy.routes.length != dummy.urls.length'); t.end(); return;}
+        var router = dummy.getRouter(true);
+        var push_state_actions = _.map(_.range(dummy.urls.length), function(i){
+            return function(cb){
+                if (i % 2){
+                    router.pushRoute(dummy.routes[i]);
+                } else {
+                    router.pushUrl(dummy.urls[i]);
+                }
+                router.once('route', function(route){
+                    t.doesNotThrow(getAssertState(router, dummy.urls[i], dummy.routes[i].name, dummy.routes[i].params));
+                    cb(null);
+                });
+            };
+        });
+        var pop_state_actions = _.map(_.range(dummy.urls.length-1).reverse(), function(i){
+            return function(cb){
+                if (bindToWindow){
+                    router.back();
+                } else {
+                    if (i % 2){
+                        router.replaceUrl(dummy.urls[i]);
+                    } else {
+                        router.replaceRoute(dummy.routes[i]);
+                    }
+                }
+
+                router.once('route', function(route){
+                    t.doesNotThrow(getAssertState(router, dummy.urls[i], dummy.routes[i].name, dummy.routes[i].params));
+                    cb(null);
+                });
+            };
+        });
+        asyncSeries([].concat(push_state_actions, pop_state_actions), function(error){
+            if (error){t.fail(error); t.end(); return;}
+            t.end();
+        });
+    };
+}
 
 function getAssertState(router, url, route_name, route_params){
     return function(){
