@@ -1,7 +1,7 @@
 {
   "name": "routeemitter",
   "version": "0.1.0",
-  "description": "(a) abstract urls as named `Route`s with parameters, given a set of named url patterns (b) track a 'prev_route' & [current] 'route', optionally (and by default) bind to document location, and exposing interface for changing said route.",
+  "description": "Isomorphic router to (a) abstract urls as named `Route`s with parameters, given a set of named url patterns (b) track a `prev_route` & [current] `route`, optionally (and by default) bind to document location on the browser, and exposing interface for changing said route everywhere.",
   "keywords": [
     "observe",
     "observable",
