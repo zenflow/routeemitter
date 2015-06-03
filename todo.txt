@@ -1,4 +1,3 @@
-ObsRouter.defaults
 document everything over again
 smoothScroll option
 add & test for more complex events
