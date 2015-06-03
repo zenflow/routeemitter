@@ -13,6 +13,13 @@ test('stateless members', function(t){
     t.equal(typeof router.Route, 'function');
     t.ok(router.Route.prototype instanceof RouteEmitter.prototype.Route);
 });
+test('throws error if we try to get unreachable route', function(t){
+    t.plan(1);
+    var router = dummy.getRouter();
+    t.throws(function(){
+        router.Route('notfound', {path: 'a'});
+    });
+});
 test('route to url and to route', getTestRouteToUrlToRoute());
 test('route to url and to route /w patternPrefix: /anything/', getTestRouteToUrlToRoute({patternPrefix: '/anything/'}));
 test('url to route to url', getTestUrlToRouteToUrl());

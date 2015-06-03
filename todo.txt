@@ -1,7 +1,6 @@
 bindToWindow: 'hash'
 ractive-adaptors-routeemitter
 
-tests: throws error if we try to compute url of unreachable route
 assert Route constructor paramaters (i.e. runtime errors)
 
 add & test for more complex events

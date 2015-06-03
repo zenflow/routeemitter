@@ -6,7 +6,7 @@ var dummy = {
         a: 'a',
         b: 'b(/:x)',
         c: 'c/:x/c',
-        notfound: '(*path)'
+        notfound: '*path'
     },
     urls: ['/a', '/b/asf', '/c/c/c', '/c/c/c?f=1', '/c/c/c/c', '/?asd=asd'],
     routes: [
@@ -18,10 +18,9 @@ var dummy = {
         {name: 'home', params: {asd: 'asd'}}
     ],
     getRouter: function(options){
-        var router = new RouteEmitter(dummy.patterns, _.assign({}, {
+        return new RouteEmitter(dummy.patterns, _.assign({}, {
             bindToWindow: false
         }, options || {}));
-        return router;
     }
 };
 module.exports = dummy;
