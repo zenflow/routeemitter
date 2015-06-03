@@ -1,7 +1,6 @@
-old -> last
 bindToWindow: 'hash'
-attachLinkHandler option
 ractive-adaptors-routeemitter
+attachLinkHandler option
 
 tests: throws error if we try to compute url of unreachable route
 assert Route constructor paramaters (i.e. runtime errors)
