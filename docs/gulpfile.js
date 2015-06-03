@@ -36,4 +36,4 @@ gulp.task('commit', ['build'], function(cb){
 		basedir: path.join(__dirname, '..'), verbose: true
 	}, cb);
 });
-gulp.task('default', ['commit']);
+gulp.task('default', ['build']);
