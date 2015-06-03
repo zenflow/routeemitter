@@ -1,5 +1,5 @@
 # routeemitter
-Isomorphic router to (a) abstract urls as named `Route`s with parameters, given a set of named url patterns (b) track a `prev_route` & [current] `route`, optionally (and by default) bind to document location on the browser, and exposing interface for changing said route everywhere.
+Isomorphic router to (a) abstract urls as named `Route`s with parameters, given a set of named url patterns (b) track a current `route`, optionally (and by default) binding to document location on the browser, and exposing interface for changing the route.
 
 [![build status](https://travis-ci.org/zenflow/routeemitter.svg?branch=master)](https://travis-ci.org/zenflow/routeemitter?branch=master)
 [![dependencies](https://david-dm.org/zenflow/routeemitter.svg)](https://david-dm.org/zenflow/routeemitter)
@@ -24,7 +24,7 @@ var router = new RouteEmitter({
     home: '/',
     blog: '/blog(/tag/:tag)(/:slug)',
     contact: '/contact'
-}, {});
+}, {/* options... */});
 
 router.on('route', function(route, old_route){
     presenter.updatePage(route, old_route);
@@ -42,11 +42,6 @@ router.on('route', function(route, old_route){
     }
 });
 
-// pardon the jquery syntax :p anyone know a good micro module to subscribe to delegated dom events?
-$('body').on('click', 'a', function(event){
-    router.pushRoute(this.pathname+this.search+this.hash); // TODO: include some sugar method for this concatenation
-    event.preventDefault()
-});
 ```
 
 ## changelog

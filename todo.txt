@@ -1,8 +1,7 @@
-bindToWindow: 'hash'
+hash: Boolean option
 ractive-adaptors-routeemitter
 
 assert Route constructor paramaters (i.e. runtime errors)
-
 add & test for more complex events
 readme description
 document everything over again
