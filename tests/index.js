@@ -55,7 +55,7 @@ test('state manipulation /w bindToWindow: true', getTestStateManipulation(true))
 function getTestStateManipulation(bindToWindow){
     return function(t){
         if (dummy.urls.length!=dummy.routes.length){t.fail('dummy.routes.length != dummy.urls.length'); t.end(); return;}
-        var router = dummy.getRouter(true);
+        var router = dummy.getRouter(bindToWindow);
         var push_state_actions = _.map(_.range(dummy.urls.length), function(i){
             return function(cb){
                 if (i % 2){
@@ -89,6 +89,10 @@ function getTestStateManipulation(bindToWindow){
         });
         asyncSeries([].concat(push_state_actions, pop_state_actions), function(error){
             if (error){t.fail(error); t.end(); return;}
+            if (bindToWindow && process.browser){
+                router.back();
+                router.destroy();
+            }
             t.end();
         });
     };
