@@ -15,12 +15,16 @@
     "location",
     "history"
   ],
-  "main": "lib/index.js",
   "author": {
     "name": "Matthew Francis Brunetti",
     "email": "zenflow87@gmail.com"
   },
   "license": "MIT",
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "README.md"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/zenflow/routeemitter"
