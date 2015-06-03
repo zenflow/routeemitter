@@ -50,10 +50,7 @@ test('converts dummy urls to dummy route equivalents', function(t){
 });
 
 test('state manipulation /w bindToWindow: false', getTestStateManipulation(false));
-
-if (process.browser){
-    test('state manipulation /w bindToWindow: true', getTestStateManipulation(true));
-}
+test('state manipulation /w bindToWindow: true', getTestStateManipulation(true));
 
 function getTestStateManipulation(bindToWindow){
     return function(t){
@@ -74,7 +71,7 @@ function getTestStateManipulation(bindToWindow){
         });
         var pop_state_actions = _.map(_.range(dummy.urls.length-1).reverse(), function(i){
             return function(cb){
-                if (bindToWindow){
+                if (process.browser && bindToWindow){
                     router.back();
                 } else {
                     if (i % 2){
