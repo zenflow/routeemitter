@@ -1,5 +1,12 @@
-prefix url patterns
+hashtag routing
+rename to RouteEmitter/routeemitter
+replaceParams(.. , true) -> replaceRoute(.. , true)
+Route#extend(), Route#push & Route#replace
+ObsRouter.Route().equals(current_route)
+
 tests: throws error if we try to compute url of unreachable route
+
+
 add & test for more complex events
 document everything over again
 smoothScroll option
