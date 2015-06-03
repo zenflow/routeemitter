@@ -1,6 +1,5 @@
 # obs-router
-
-## Mutable observable abstraction of url as route with parameters
+Mutable observable abstraction of url as route with parameters
 
 [![build status](https://travis-ci.org/zenflow/obs-router.svg?branch=master)](https://travis-ci.org/zenflow/obs-router?branch=master)
 [![dependencies](https://david-dm.org/zenflow/obs-router.svg)](https://david-dm.org/zenflow/obs-router)
