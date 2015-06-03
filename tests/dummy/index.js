@@ -21,7 +21,6 @@ var dummy = {
         var router = new RouteEmitter(dummy.patterns, _.assign({}, {
             bindToWindow: false
         }, options || {}));
-        if (process.browser){window.router = router;}
         return router;
     }
 };

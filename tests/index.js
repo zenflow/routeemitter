@@ -5,10 +5,6 @@ var asyncSeries = require('async-series');
 var dummy = require('./dummy');
 var RouteEmitter = require('../lib');
 
-if (process.browser){
-    window.RouteEmitter = RouteEmitter;
-}
-
 test('stateless members', function(t){
     t.plan(4);
     var router = dummy.getRouter();
@@ -25,6 +21,30 @@ test('dummy urls match dummy routes', getTestUrlsMatchRoutes());
 test('dummy urls match dummy routes /w patternPrefix: /anything/', getTestUrlsMatchRoutes({patternPrefix: '/anything/'}));
 test('state manipulation /w bindToWindow: false', getTestStateManipulation({bindToWindow: false}));
 test('state manipulation /w bindToWindow: true', getTestStateManipulation({bindToWindow: true}));
+test('*** not a test***', function(t){
+    t.end();
+    if (process.browser){
+        window.RouteEmitter = RouteEmitter;
+        window.router = dummy.getRouter({bindToWindow: true});
+        _.forEach(dummy.urls, function(url){
+            var route = window.router.Route(url);
+            var anchor_el = window.document.createElement('a');
+            anchor_el.setAttribute('href', route.url);
+            anchor_el.appendChild(window.document.createTextNode(route.name+' '+JSON.stringify(route.params)));
+            var pre_el = window.document.createElement('pre');
+            pre_el.appendChild(anchor_el);
+            window.document.body.appendChild(pre_el);
+        });
+        var pre_el = window.document.createElement('pre');
+        pre_el.appendChild(window.document.createTextNode(' --- '));
+        window.document.body.appendChild(pre_el);
+        window.router.on('route', function(route, last_route){
+            var pre_el = window.document.createElement('pre');
+            pre_el.appendChild(window.document.createTextNode(route.name+' '+JSON.stringify(route.params)));
+            window.document.body.appendChild(pre_el);
+        });
+    }
+});
 
 function getTestUrlToRouteToUrl(options){
     options = options || {};
@@ -73,6 +93,7 @@ function getTestStateManipulation(options){
     return function(t){
         if (dummy.urls.length!=dummy.routes.length){t.fail('dummy.routes.length != dummy.urls.length'); t.end(); return;}
         var router = dummy.getRouter(options);
+        var initial_route = router.route;
         var push_state_actions = _.map(_.range(dummy.urls.length), function(i){
             return function(cb){
                 if (i % 2){
@@ -107,10 +128,19 @@ function getTestStateManipulation(options){
         asyncSeries([].concat(push_state_actions, pop_state_actions), function(error){
             if (error){t.fail(error); t.end(); return;}
             if (process.browser && options.bindToWindow){
-                router.back();
-                router.destroy();
+                if (router.route.equals(initial_route)){
+                    router.destroy();
+                    t.end();
+                } else {
+                    router.back();
+                    router.once('route', function(route, last_route){
+                        router.destroy();
+                        t.end();
+                    });
+                }
+            } else {
+                t.end();
             }
-            t.end();
         });
     };
 }
