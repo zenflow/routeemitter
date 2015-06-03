@@ -100,6 +100,9 @@ function getTestStateManipulation(options){
 
                 router.once('route', function(route){
                     t.doesNotThrow(getAssertState(router, dummy.urls[i], dummy.routes[i].name, dummy.routes[i].params));
+                    if (process.browser && options.bindToWindow){
+                        router.destroy();
+                    }
                     cb(null);
                 });
             };
