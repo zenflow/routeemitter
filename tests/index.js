@@ -11,51 +11,68 @@ if (process.browser){
 
 test('stateless members', function(t){
     t.plan(4);
-    var router = dummy.getRouter(false);
+    var router = dummy.getRouter();
     t.equal(typeof router.patterns, 'object');
     t.deepEqual(router.patterns, dummy.patterns);
     t.equal(typeof router.Route, 'function');
     t.ok(router.Route.prototype instanceof ObsRouter.prototype.Route);
 });
+test('route to url and to route', getTestRouteToUrlToRoute());
+test('route to url and to route /w basePath: /anything/', getTestRouteToUrlToRoute({basePath: '/anything/'}));
+test('url to route to url', getTestUrlToRouteToUrl());
+test('url to route to url /w basePath: /anything/', getTestUrlToRouteToUrl({basePath: '/anything/'}));
+test('dummy urls match dummy routes', getTestUrlsMatchRoutes());
+test('dummy urls match dummy routes /w basePath: /anything/', getTestUrlsMatchRoutes({basePath: '/anything/'}));
+test('state manipulation /w bindToWindow: false', getTestStateManipulation({bindToWindow: false}));
+test('state manipulation /w bindToWindow: true', getTestStateManipulation({bindToWindow: true}));
 
-test('converts dummy urls to routes and back to same urls', function(t){
-    t.plan(dummy.urls.length);
-    var router = dummy.getRouter(false);
-    _.forEach(dummy.urls, function(dummy_url){
-        var route = router.Route(dummy_url);
-        route = router.Route(route.name, route.params);
-        t.equal(route.url, dummy_url);
-    });
-});
+function getTestUrlToRouteToUrl(options){
+    options = options || {};
+    return function(t){
+        t.plan(dummy.urls.length);
+        var router = dummy.getRouter(options);
+        _.forEach(dummy.urls, function(dummy_url){
+            var full_dummmy_url = (options.basePath ? options.basePath.substr(0, options.basePath.length-1) : '') + dummy_url;
+            var route = router.Route(full_dummmy_url);
+            route = router.Route(route.name, route.params);
+            t.equal(route.url, full_dummmy_url);
+        });
+    };
+}
+function getTestRouteToUrlToRoute(options){
+    options = options || {};
+    return function(t){
+        t.plan(dummy.routes.length*2);
+        var router = dummy.getRouter(options);
+        _.forEach(dummy.routes, function(dummy_route){
+            var route = router.Route(dummy_route.name, dummy_route.params);
+            route = router.Route(route.url);
+            t.equal(route.name, dummy_route.name);
+            t.deepEqual(route.params, dummy_route.params);
+        });
+    };
+}
 
-test('converts dummy routes to urls and back to same routes', function(t){
-    t.plan(dummy.routes.length*2);
-    var router = dummy.getRouter(false);
-    _.forEach(dummy.routes, function(dummy_route){
-        var route = router.Route(dummy_route.name, dummy_route.params);
-        route = router.Route(route.url);
-        t.equal(route.name, dummy_route.name);
-        t.deepEqual(route.params, dummy_route.params);
-    });
-});
+function getTestUrlsMatchRoutes(options){
+    options = options || {};
+    return function(t){
+        t.plan(dummy.urls.length*2);
+        var router = dummy.getRouter(options);
+        _.forEach(dummy.routes, function(dummy_route, i){
+            var dummy_url = dummy.urls[i];
+            var full_dummmy_url = (options.basePath ? options.basePath.substr(0, options.basePath.length-1) : '') + dummy_url;
+            var route = router.Route(full_dummmy_url);
+            t.equal(route.name, dummy_route.name);
+            t.deepEqual(route.params, dummy_route.params);
+        });
+    };
+}
 
-test('converts dummy urls to dummy route equivalents', function(t){
-    t.plan(dummy.urls.length*2);
-    var router = dummy.getRouter(false);
-    _.forEach(dummy.routes, function(dummy_route, i){
-        var route = router.Route(dummy.urls[i]);
-        t.equal(route.name, dummy_route.name);
-        t.deepEqual(route.params, dummy_route.params);
-    });
-});
-
-test('state manipulation /w bindToWindow: false', getTestStateManipulation(false));
-test('state manipulation /w bindToWindow: true', getTestStateManipulation(true));
-
-function getTestStateManipulation(bindToWindow){
+function getTestStateManipulation(options){
+    options = options || {};
     return function(t){
         if (dummy.urls.length!=dummy.routes.length){t.fail('dummy.routes.length != dummy.urls.length'); t.end(); return;}
-        var router = dummy.getRouter(bindToWindow);
+        var router = dummy.getRouter(options);
         var push_state_actions = _.map(_.range(dummy.urls.length), function(i){
             return function(cb){
                 if (i % 2){
@@ -71,7 +88,7 @@ function getTestStateManipulation(bindToWindow){
         });
         var pop_state_actions = _.map(_.range(dummy.urls.length-1).reverse(), function(i){
             return function(cb){
-                if (process.browser && bindToWindow){
+                if (process.browser && options.bindToWindow){
                     router.back();
                 } else {
                     if (i % 2){
@@ -89,7 +106,7 @@ function getTestStateManipulation(bindToWindow){
         });
         asyncSeries([].concat(push_state_actions, pop_state_actions), function(error){
             if (error){t.fail(error); t.end(); return;}
-            if (bindToWindow && process.browser){
+            if (process.browser && options.bindToWindow){
                 router.back();
                 router.destroy();
             }
