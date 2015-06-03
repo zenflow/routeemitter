@@ -1,4 +1,4 @@
-var ObsRouter = require('../../lib');
+var RouteEmitter = require('../../lib');
 var _ = require('lodash');
 var dummy = {
     patterns: {
@@ -18,7 +18,7 @@ var dummy = {
         {name: 'home', params: {asd: 'asd'}}
     ],
     getRouter: function(options){
-        var router = new ObsRouter(dummy.patterns, _.assign({}, {
+        var router = new RouteEmitter(dummy.patterns, _.assign({}, {
             bindToWindow: false
         }, options || {}));
         if (process.browser){window.router = router;}

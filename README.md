@@ -1,87 +1,55 @@
-# obs-router
-Mutable observable abstraction of url as route with parameters
+# routeemitter
+(a) abstract urls as named `Route`s with parameters, given a set of named url patterns (b) track a 'prev_route' & [current] 'route', optionally (and by default) bind to document location, and exposing interface for changing said route.
 
-[![build status](https://travis-ci.org/zenflow/obs-router.svg?branch=master)](https://travis-ci.org/zenflow/obs-router?branch=master)
-[![dependencies](https://david-dm.org/zenflow/obs-router.svg)](https://david-dm.org/zenflow/obs-router)
-[![dev-dependencies](https://david-dm.org/zenflow/obs-router/dev-status.svg)](https://david-dm.org/zenflow/obs-router#info=devDependencies)
+[![build status](https://travis-ci.org/zenflow/routeemitter.svg?branch=master)](https://travis-ci.org/zenflow/routeemitter?branch=master)
+[![dependencies](https://david-dm.org/zenflow/routeemitter.svg)](https://david-dm.org/zenflow/routeemitter)
+[![dev-dependencies](https://david-dm.org/zenflow/routeemitter/dev-status.svg)](https://david-dm.org/zenflow/routeemitter#info=devDependencies)
 
-[![npm](https://nodei.co/npm/obs-router.svg?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/obs-router)
+[![npm](https://nodei.co/npm/routeemitter.svg?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/routeemitter)
 
-### description
-
-ObsRouter provides a two-way mapping between urls (rather pathname + query) and named routes with parameters, given a named set of pathname patterns. 
-
-Instances are EventEmitters & optionally (& by default) bind to document location in the browser, using [html5-history](https://www.npmjs.com/package/html5-history) polyfill.
-
-Also exposes static methods, `routeToUrl` and `urlToRoute`, which both take the patterns as their first argument.
-
-Uses [route-parser](http://npmjs.org/package/route-parser) to match and obtain parameters from pathnames, and node native 'querystring' for query parameters.
-
-Check out the [documentation](https://zenflow.github.io/obs-router).
-
-### links
-
-- [npm](https://npmjs.org/package/obs-router)
-- [github](https://github.com/zenflow/obs-router)
-- [documentation](https://zenflow.github.io/obs-router)
-
-### installation
+## installation
 
 ```
-npm install --save obs-router
+npm install --save routeemitter
 ```
 
-### example
+## example
 
 ```js
-var ObsRouter = require('obs-router');
+var RouteEmitter = require('routeemitter');
 var presenter = require('./presenter');
 var api = require('./api');
 
-var router = new ObsRouter({
+var router = new RouteEmitter({
     home: '/',
     blog: '/blog(/tag/:tag)(/:slug)',
     contact: '/contact'
-}, {
-    //bindToWindow: false, // would prevent binding to document location on the browser
-    initialEmit: true // cause to emit events after nextTick even though nothing has changed
-});
+}, {});
 
-router.on('route', function(route, params, old_route, old_params){
-    presenter.updatePage(route, params);
-});
-
-router.on('blog', function(params){
-    if (params){
-        if (params.tag){
-            api.getBlogsByTag(params.tag).then(function(blogs){
-                presenter.updateBlogQuery(blogs);
+router.on('route', function(route, old_route){
+    presenter.updatePage(route, old_route);
+    if (route.name=='blog'){
+        if (route.params.tag){
+            api.getBlogsByTag(route.params.tag).then(function(blogs){
+                presenter.updateBlogList(blogs);
             });
-        } else if (params.slug){
-            api.getBlogBySlug(params.slug).then(function(blog){
-                presenter.updateBlog(blog);
+        }
+        if (route.params.slug){
+            api.getBlogBySlug(route.params.tag).then(function(blog){
+                presenter.updateCurrentBlog(blog);
             });
         }
     }
 });
+
+// pardon the jquery syntax :p anyone know a good micro module to subscribe to delegated dom events?
+$('body').on('click', 'a', function(event){
+    router.pushRoute(this.pathname+this.search+this.hash); // TODO: include some sugar method for this concatenation
+    event.preventDefault()
+});
 ```
 
-### changelog
+## changelog
 
-#### 2.0.4
-
-* One dependency for lodash utilities
-
-#### 2.0.3
-
-* Added commit task to docs gulpfile using [gh-pages-commit](https://npmjs.org/package/gh-pages-commit)
-
-#### 2.0.2
-
-* Improved documentation
-* fixed google analytics for docs
-
-#### 2.0.1
-
-* Improved documentation
-* fixed package.json scripts.test command for unix
+### 0.1.0
+- Initial release as RouteEmitter

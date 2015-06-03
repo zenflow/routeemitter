@@ -1,4 +1,4 @@
-rename to RouteEmitter/routeemitter
+old -> last
 bindToWindow: 'hash'
 attachLinkHandler option
 ractive-adaptors-routeemitter
@@ -7,5 +7,6 @@ tests: throws error if we try to compute url of unreachable route
 assert Route constructor paramaters (i.e. runtime errors)
 
 add & test for more complex events
+readme description
 document everything over again
 smoothScroll option

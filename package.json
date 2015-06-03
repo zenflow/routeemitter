@@ -1,7 +1,7 @@
 {
-  "name": "obs-router",
-  "version": "3.0.0",
-  "description": "***",
+  "name": "routeemitter",
+  "version": "0.1.0",
+  "description": "(a) abstract urls as named `Route`s with parameters, given a set of named url patterns (b) track a 'prev_route' & [current] 'route', optionally (and by default) bind to document location, and exposing interface for changing said route.",
   "keywords": [
     "observe",
     "observable",
@@ -23,8 +23,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zenflow/obs-router"
+    "url": "https://github.com/zenflow/routeemitter"
   },
+  "bugs": {
+    "url": "https://github.com/zenflow/routeemitter/issues"
+  },
+  "homepage": "https://zenflow.github.io/routeemitter/",
   "dependencies": {
     "cancellable-next-tick": "^1.0.3",
     "html5-history": "^0.1.5",

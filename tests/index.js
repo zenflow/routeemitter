@@ -3,10 +3,10 @@ var test = require('tape');
 var _ = require('lodash');
 var asyncSeries = require('async-series');
 var dummy = require('./dummy');
-var ObsRouter = require('../lib');
+var RouteEmitter = require('../lib');
 
 if (process.browser){
-    window.ObsRouter = ObsRouter;
+    window.RouteEmitter = RouteEmitter;
 }
 
 test('stateless members', function(t){
@@ -15,7 +15,7 @@ test('stateless members', function(t){
     t.equal(typeof router.patterns, 'object');
     t.deepEqual(router.patterns, dummy.patterns);
     t.equal(typeof router.Route, 'function');
-    t.ok(router.Route.prototype instanceof ObsRouter.prototype.Route);
+    t.ok(router.Route.prototype instanceof RouteEmitter.prototype.Route);
 });
 test('route to url and to route', getTestRouteToUrlToRoute());
 test('route to url and to route /w patternPrefix: /anything/', getTestRouteToUrlToRoute({patternPrefix: '/anything/'}));
