@@ -18,11 +18,11 @@ test('stateless members', function(t){
     t.ok(router.Route.prototype instanceof ObsRouter.prototype.Route);
 });
 test('route to url and to route', getTestRouteToUrlToRoute());
-test('route to url and to route /w basePath: /anything/', getTestRouteToUrlToRoute({basePath: '/anything/'}));
+test('route to url and to route /w patternPrefix: /anything/', getTestRouteToUrlToRoute({patternPrefix: '/anything/'}));
 test('url to route to url', getTestUrlToRouteToUrl());
-test('url to route to url /w basePath: /anything/', getTestUrlToRouteToUrl({basePath: '/anything/'}));
+test('url to route to url /w patternPrefix: /anything/', getTestUrlToRouteToUrl({patternPrefix: '/anything/'}));
 test('dummy urls match dummy routes', getTestUrlsMatchRoutes());
-test('dummy urls match dummy routes /w basePath: /anything/', getTestUrlsMatchRoutes({basePath: '/anything/'}));
+test('dummy urls match dummy routes /w patternPrefix: /anything/', getTestUrlsMatchRoutes({patternPrefix: '/anything/'}));
 test('state manipulation /w bindToWindow: false', getTestStateManipulation({bindToWindow: false}));
 test('state manipulation /w bindToWindow: true', getTestStateManipulation({bindToWindow: true}));
 
@@ -32,7 +32,7 @@ function getTestUrlToRouteToUrl(options){
         t.plan(dummy.urls.length);
         var router = dummy.getRouter(options);
         _.forEach(dummy.urls, function(dummy_url){
-            var full_dummmy_url = (options.basePath ? options.basePath.substr(0, options.basePath.length-1) : '') + dummy_url;
+            var full_dummmy_url = (options.patternPrefix ? options.patternPrefix.substr(0, options.patternPrefix.length-1) : '') + dummy_url;
             var route = router.Route(full_dummmy_url);
             route = router.Route(route.name, route.params);
             t.equal(route.url, full_dummmy_url);
@@ -60,7 +60,7 @@ function getTestUrlsMatchRoutes(options){
         var router = dummy.getRouter(options);
         _.forEach(dummy.routes, function(dummy_route, i){
             var dummy_url = dummy.urls[i];
-            var full_dummmy_url = (options.basePath ? options.basePath.substr(0, options.basePath.length-1) : '') + dummy_url;
+            var full_dummmy_url = (options.patternPrefix ? options.patternPrefix.substr(0, options.patternPrefix.length-1) : '') + dummy_url;
             var route = router.Route(full_dummmy_url);
             t.equal(route.name, dummy_route.name);
             t.deepEqual(route.params, dummy_route.params);
