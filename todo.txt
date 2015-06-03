@@ -1,11 +1,10 @@
-hashtag routing
 rename to RouteEmitter/routeemitter
-replaceParams(.. , true) -> replaceRoute(.. , true)
-Route#extend(), Route#push & Route#replace
-ObsRouter.Route().equals(current_route)
+bindToWindow: 'hash'
+attachLinkHandler option
+ractive-adaptors-routeemitter
 
 tests: throws error if we try to compute url of unreachable route
-
+assert Route constructor paramaters (i.e. runtime errors)
 
 add & test for more complex events
 document everything over again
