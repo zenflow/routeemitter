@@ -20,7 +20,7 @@ gulp.task('build', ['clean'], function(){
 		.pipe(jsdoc.generator('build', {
 			path: 'ink-docstrap',
 			footer: styles+scripts,
-			systemName: 'obs-router',
+			systemName: 'RouteEmitter',
 			theme: 'superhero',
 			navType: 'vertical',
 			inverseNav: true,
