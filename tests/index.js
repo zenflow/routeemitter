@@ -103,19 +103,23 @@ function getTestStateManipulation(options){
         var initial_route = router.route;
         var push_state_actions = _.map(_.range(dummy.urls.length), function(i){
             return function(cb){
+                router.once('route', function(route){
+                    t.doesNotThrow(getAssertState(router, dummy.urls[i], dummy.routes[i].name, dummy.routes[i].params));
+                    cb(null);
+                });
                 if (i % 2){
                     router.pushRoute(dummy.routes[i]);
                 } else {
                     router.pushUrl(dummy.urls[i]);
                 }
-                router.once('route', function(route){
-                    t.doesNotThrow(getAssertState(router, dummy.urls[i], dummy.routes[i].name, dummy.routes[i].params));
-                    cb(null);
-                });
             };
         });
         var pop_state_actions = _.map(_.range(dummy.urls.length-1).reverse(), function(i){
             return function(cb){
+                router.once('route', function(route){
+                    t.doesNotThrow(getAssertState(router, dummy.urls[i], dummy.routes[i].name, dummy.routes[i].params));
+                    cb(null);
+                });
                 if (process.browser && options.bindToWindow){
                     router.back();
                 } else {
@@ -125,11 +129,6 @@ function getTestStateManipulation(options){
                         router.replaceRoute(dummy.routes[i]);
                     }
                 }
-
-                router.once('route', function(route){
-                    t.doesNotThrow(getAssertState(router, dummy.urls[i], dummy.routes[i].name, dummy.routes[i].params));
-                    cb(null);
-                });
             };
         });
         asyncSeries([].concat(push_state_actions, pop_state_actions), function(error){
@@ -139,11 +138,11 @@ function getTestStateManipulation(options){
                     router.destroy();
                     t.end();
                 } else {
-                    router.back();
                     router.once('route', function(route, last_route){
                         router.destroy();
                         t.end();
                     });
+                    router.back();
                 }
             } else {
                 t.end();

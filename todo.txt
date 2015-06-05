@@ -1,4 +1,7 @@
-hash: Boolean option
+hash: Boolean option, detect html5 history
+remove .go .back .forward interface and simply expose .History interface
+remove replace/pushUrl() in favor of replace/pushState
+debug mode
 ractive-adaptors-routeemitter
 
 assert Route constructor paramaters (i.e. runtime errors)

@@ -34,7 +34,6 @@
   },
   "homepage": "https://zenflow.github.io/routeemitter/",
   "dependencies": {
-    "cancellable-next-tick": "^1.0.3",
     "html5-history": "^0.1.5",
     "lodash": "^3.9.3",
     "route-parser": "0.0.3"
