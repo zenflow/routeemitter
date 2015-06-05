@@ -1,7 +1,10 @@
-hash: Boolean option, detect html5 history
-remove .go .back .forward interface and simply expose .History interface
+support optional hash, protocol & domain in url in Route
+get rid of "private" prototype members
 remove replace/pushUrl() in favor of replace/pushState
+
+test emitting events
 debug mode
+
 ractive-adaptors-routeemitter
 
 assert Route constructor paramaters (i.e. runtime errors)
