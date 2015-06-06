@@ -108,9 +108,9 @@ function getTestStateManipulation(options){
                     cb(null);
                 });
                 if (i % 2){
-                    router.pushRoute(dummy.routes[i]);
+                    router.push(dummy.routes[i]);
                 } else {
-                    router.pushUrl(dummy.urls[i]);
+                    router.push(dummy.urls[i]);
                 }
             };
         });
@@ -124,9 +124,9 @@ function getTestStateManipulation(options){
                     router.back();
                 } else {
                     if (i % 2){
-                        router.replaceUrl(dummy.urls[i]);
+                        router.replace(dummy.urls[i]);
                     } else {
-                        router.replaceRoute(dummy.routes[i]);
+                        router.replace(dummy.routes[i]);
                     }
                 }
             };
