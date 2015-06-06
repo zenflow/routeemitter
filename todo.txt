@@ -1,7 +1,4 @@
 support optional hash, protocol & domain in url in Route
-remove replace/pushUrl() in favor of replace/pushState
-
-test emitting events
 debug mode
 
 ractive-adaptors-routeemitter

@@ -41,7 +41,7 @@
   "devDependencies": {
     "async-series": "0.0.1",
     "del": "^1.1.1",
-    "gather-events": "^1.0.1",
+    "gather-events": "^1.1.0",
     "gh-pages-commit": "^1.0.2",
     "gulp": "^3.8.11",
     "gulp-jsdoc": "^0.1.4",

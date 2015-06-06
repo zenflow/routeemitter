@@ -2,8 +2,11 @@ var assert = require('assert');
 var test = require('tape');
 var _ = require('lodash');
 var asyncSeries = require('async-series');
+var gatherEvents = require('gather-events');
 var dummy = require('./dummy');
 var RouteEmitter = require('../lib');
+
+var POSSIBLE_EVENTS = ['route'];
 
 test('stateless members', function(t){
     t.plan(4);
@@ -103,8 +106,10 @@ function getTestStateManipulation(options){
         var initial_route = router.route;
         var push_state_actions = _.map(_.range(dummy.urls.length), function(i){
             return function(cb){
+                var endGather = gatherEvents(router, POSSIBLE_EVENTS);
                 router.once('route', function(route){
                     t.doesNotThrow(getAssertState(router, dummy.urls[i], dummy.routes[i].name, dummy.routes[i].params));
+                    t.deepEqual(endGather(true), [{route: [router.route, router.last_route]}]);
                     cb(null);
                 });
                 if (i % 2){
@@ -116,8 +121,10 @@ function getTestStateManipulation(options){
         });
         var pop_state_actions = _.map(_.range(dummy.urls.length-1).reverse(), function(i){
             return function(cb){
+                var endGather = gatherEvents(router, POSSIBLE_EVENTS);
                 router.once('route', function(route){
                     t.doesNotThrow(getAssertState(router, dummy.urls[i], dummy.routes[i].name, dummy.routes[i].params));
+                    t.deepEqual(endGather(true), [{route: [router.route, router.last_route]}]);
                     cb(null);
                 });
                 if (process.browser && options.bindToDocument){
