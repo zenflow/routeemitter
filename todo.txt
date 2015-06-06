@@ -1,5 +1,4 @@
 support optional hash, protocol & domain in url in Route
-get rid of "private" prototype members
 remove replace/pushUrl() in favor of replace/pushState
 
 test emitting events

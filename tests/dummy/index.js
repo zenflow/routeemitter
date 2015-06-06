@@ -19,7 +19,7 @@ var dummy = {
     ],
     getRouter: function(options){
         return new RouteEmitter(dummy.patterns, _.assign({}, {
-            bindToWindow: false
+            bindToDocument: false
         }, options || {}));
     }
 };

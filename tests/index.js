@@ -26,13 +26,13 @@ test('url to route to url', getTestUrlToRouteToUrl());
 test('url to route to url /w patternPrefix: /anything/', getTestUrlToRouteToUrl({patternPrefix: '/anything/'}));
 test('dummy urls match dummy routes', getTestUrlsMatchRoutes());
 test('dummy urls match dummy routes /w patternPrefix: /anything/', getTestUrlsMatchRoutes({patternPrefix: '/anything/'}));
-test('state manipulation /w bindToWindow: false', getTestStateManipulation({bindToWindow: false}));
-test('state manipulation /w bindToWindow: true', getTestStateManipulation({bindToWindow: true}));
+test('state manipulation /w bindToDocument: false', getTestStateManipulation({bindToDocument: false}));
+test('state manipulation /w bindToDocument: true', getTestStateManipulation({bindToDocument: true}));
 test('*** not a test***', function(t){
     t.end();
     if (process.browser){
         window.RouteEmitter = RouteEmitter;
-        window.router = dummy.getRouter({bindToWindow: true});
+        window.router = dummy.getRouter({bindToDocument: true});
         _.forEach(dummy.urls, function(url){
             var route = window.router.Route(url);
             var anchor_el = window.document.createElement('a');
@@ -120,7 +120,7 @@ function getTestStateManipulation(options){
                     t.doesNotThrow(getAssertState(router, dummy.urls[i], dummy.routes[i].name, dummy.routes[i].params));
                     cb(null);
                 });
-                if (process.browser && options.bindToWindow){
+                if (process.browser && options.bindToDocument){
                     router.back();
                 } else {
                     if (i % 2){
@@ -133,7 +133,7 @@ function getTestStateManipulation(options){
         });
         asyncSeries([].concat(push_state_actions, pop_state_actions), function(error){
             if (error){t.fail(error); t.end(); return;}
-            if (process.browser && options.bindToWindow){
+            if (process.browser && options.bindToDocument){
                 if (router.route.equals(initial_route)){
                     router.destroy();
                     t.end();
