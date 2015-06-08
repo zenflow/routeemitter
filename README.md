@@ -1,5 +1,5 @@
 # routeemitter
-Isomorphic router to (a) abstract urls as named `Route`s with parameters, given a set of named url patterns (b) track a current `route`, optionally (and by default) binding to document location on the browser, and exposing interface for changing the route.
+Isomorphic router to (a) abstract urls `Route` (with name & parameters), given a set of named url patterns (b) track and manipulate a current `route`, optionally (and by default) binding to document location on the browser
 
 [![build status](https://travis-ci.org/zenflow/routeemitter.svg?branch=master)](https://travis-ci.org/zenflow/routeemitter?branch=master)
 [![dependencies](https://david-dm.org/zenflow/routeemitter.svg)](https://david-dm.org/zenflow/routeemitter)
