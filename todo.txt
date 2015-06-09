@@ -1,7 +1,6 @@
 support optional hash, protocol & domain in url in Route
+handle full url (with protocol, origin, host, port, etc)
 debug mode
-
-ractive-adaptors-routeemitter
 
 assert Route constructor paramaters (i.e. runtime errors)
 add & test for more complex events
