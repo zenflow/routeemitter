@@ -7,6 +7,8 @@ Isomorphic url router to (a) abstract urls as `Route`s, and (b) track and manipu
 
 [![npm](https://nodei.co/npm/routeemitter.svg?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/routeemitter)
 
+## [documentation](https://zenflow.github.io/routeemitter/)
+
 ## installation
 
 ```
