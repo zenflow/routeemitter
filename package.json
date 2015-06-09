@@ -1,6 +1,6 @@
 {
   "name": "routeemitter",
-  "version": "0.1.0-rc2",
+  "version": "0.1.0-rc3",
   "description": "Isomorphic url router to (a) abstract urls as `Route`s, and (b) track and manipulate a \"current\" route, optionally (and by default) binding to document location on browser",
   "keywords": [
     "observe",
